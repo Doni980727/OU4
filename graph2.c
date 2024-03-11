@@ -90,6 +90,23 @@ graph *graph_insert_node(graph *g,
 	// Find an empty slot in the nodes array and insert the node
 	for (int i = 0; i < (g->max_nodes); i++)
 	{
+
+		// Check if the node already exist in the array to avoid duplicates
+		if (array_1d_has_value(g->nodes, i))
+		{
+
+			struct node *current_node = array_1d_inspect_value(g->nodes, i);
+
+			if (strncmp(s, current_node->name, 40) == 0)
+			{
+				// Node already exists, free memory and return
+				free(n->name);
+				dlist_kill(n->neighbours);
+				free(n);
+				break;
+			}
+		}
+
 		if (!array_1d_has_value(g->nodes, i))
 		{
 			array_1d_set_value(g->nodes, n, i);

@@ -241,8 +241,8 @@ int main(int argc, char *argv[])
 
 	// Clean up and free memory
 	graph_kill(g);
-	// free(node_name1);
-	// free(node_name2);
+	free(node_name1);
+	free(node_name2);
 
 	return 0;
 }
