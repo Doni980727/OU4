@@ -28,55 +28,60 @@
  *
  * Returns: True if a path exists, false otherwise.
  */
-bool find_path(graph * g, node * src, node * dest) {
-        // Initialize a queue for breadth-first search
-        queue * q = queue_empty(NULL);
-        bool dest_reached;
+bool find_path(graph *g, node *src, node *dest)
+{
+	// Initialize a queue for breadth-first search
+	queue *q = queue_empty(NULL);
+	bool dest_reached;
 
-        // Mark the source node as seen and enqueue it
-        g = graph_node_set_seen(g, src, true);
-        q = queue_enqueue(q, src);
+	// Mark the source node as seen and enqueue it
+	g = graph_node_set_seen(g, src, true);
+	q = queue_enqueue(q, src);
 
-        // Breadth-first search loop
-        while (!queue_is_empty(q)) {
-                node * current_node = queue_front(q);
-                q = queue_dequeue(q);
+	// Breadth-first search loop
+	while (!queue_is_empty(q))
+	{
+		node *current_node = queue_front(q);
+		q = queue_dequeue(q);
 
-                // Get neighbors of the current node
-                dlist * get_neighbours = graph_neighbours(g, current_node);
-                dlist_pos pos = dlist_first(get_neighbours);
+		// Get neighbors of the current node
+		dlist *get_neighbours = graph_neighbours(g, current_node);
+		dlist_pos pos = dlist_first(get_neighbours);
 
-                while (!dlist_is_end(get_neighbours, pos)) {
-                        node * next_node = dlist_inspect(get_neighbours, pos);
+		while (!dlist_is_end(get_neighbours, pos))
+		{
+			node *next_node = dlist_inspect(get_neighbours, pos);
 
-                        // If the neighbor hasn't been seen, mark it as seen and enqueue it
-                        if (!graph_node_is_seen(g, next_node)) {
-                                g = graph_node_set_seen(g, next_node, true);
-                                q = queue_enqueue(q, next_node);
-                        }
+			// If the neighbor hasn't been seen, mark it as seen and enqueue it
+			if (!graph_node_is_seen(g, next_node))
+			{
+				g = graph_node_set_seen(g, next_node, true);
+				q = queue_enqueue(q, next_node);
+			}
 
-                        // Check if destination node has been reached
-                        dest_reached = nodes_are_equal(next_node, dest);
+			// Check if destination node has been reached
+			dest_reached = nodes_are_equal(next_node, dest);
 
-                        if (dest_reached == true) {
-                                // Cleanup and return if destination is reached
-                                dlist_kill(get_neighbours);
-                                g = graph_reset_seen(g);
-                                queue_kill(q);
-                                return true;
-                        }
+			if (dest_reached == true)
+			{
+				// Cleanup and return if destination is reached
+				dlist_kill(get_neighbours);
+				g = graph_reset_seen(g);
+				queue_kill(q);
+				return true;
+			}
 
-                        pos = dlist_next(get_neighbours, pos);
-                }
+			pos = dlist_next(get_neighbours, pos);
+		}
 
-                // Clean up the neighbor list for the current node
-                dlist_kill(get_neighbours);
-        }
+		// Clean up the neighbor list for the current node
+		dlist_kill(get_neighbours);
+	}
 
-        // Cleanup and reset seen status if destination is not reached
-        queue_kill(q);
-        g = graph_reset_seen(g);
-        return false;
+	// Cleanup and reset seen status if destination is not reached
+	queue_kill(q);
+	g = graph_reset_seen(g);
+	return false;
 }
 
 /**
@@ -88,41 +93,58 @@ bool find_path(graph * g, node * src, node * dest) {
  *
  * Returns: None.
  */
-void search_path(graph * g) {
-        char s1[40];
-        char s2[40];
-        char search[100];
+void search_path(graph *g)
+{
+	char s1[40];
+	char s2[40];
+	char search[100];
 
-        while (1) {
-                printf("Enter origin and destination (quit to exit): ");
-                fgets(search, sizeof(search), stdin);
-                sscanf(search, "%s %s", s1, s2);
+	while (1)
+	{
+		printf("Enter origin and destination (quit to exit): ");
+		fgets(search, sizeof(search), stdin);
+		sscanf(search, "%s %s", s1, s2);
 
-                if (strcmp(s1, "quit") == 0 || strcmp(s1, "exit") == 0) {
-                        printf("Normal exit.\n\n");
-                        graph_kill(g);
-                        exit(EXIT_SUCCESS);
-                } else if (sscanf(search, "%s %s", s1, s2) != 2) {
-                        printf("Two nodes need to be entered. Try again.\n\n");
-                } else if (graph_find_node(g, s1) == NULL) {
-                        printf("Node %s does not exist in the graph.\n\n", s1);
-                } else if (graph_find_node(g, s2) == NULL) {
-                        printf("Node %s does not exist in the graph.\n\n", s2);
-                } else {
-                        if (strcmp(s1, s2) == 0) {
-                                printf("There is a path from %s to %s.\n\n", s1, s2);
-                        } else {
-                                node * source = graph_find_node(g, s1);
-                                node * destination = graph_find_node(g, s2);
+		if (strcmp(s1, "quit") == 0 || strcmp(s1, "exit") == 0)
+		{
+			printf("Normal exit.\n\n");
+			graph_kill(g);
+			exit(EXIT_SUCCESS);
+		}
+		else if (sscanf(search, "%s %s", s1, s2) != 2)
+		{
+			printf("Two nodes need to be entered. Try again.\n\n");
+		}
+		else if (graph_find_node(g, s1) == NULL)
+		{
+			printf("Node %s does not exist in the graph.\n\n", s1);
+		}
+		else if (graph_find_node(g, s2) == NULL)
+		{
+			printf("Node %s does not exist in the graph.\n\n", s2);
+		}
+		else
+		{
+			if (strcmp(s1, s2) == 0)
+			{
+				printf("There is a path from %s to %s.\n\n", s1, s2);
+			}
+			else
+			{
+				node *source = graph_find_node(g, s1);
+				node *destination = graph_find_node(g, s2);
 
-                                if (find_path(g, source, destination) == true) {
-                                        printf("There is a path from %s to %s.\n\n", s1, s2);
-                                } else {
-                                        printf("There is no path from %s to %s.\n\n", s1, s2);
-                                }
-                        }
-                }
-        }
+				if (find_path(g, source, destination) == true)
+				{
+					printf("There is a path from %s to %s.\n\n", s1, s2);
+				}
+				else
+				{
+					printf("There is no path from %s to %s.\n\n", s1, s2);
+				}
+			}
+		}
+	}
 }
 
 /**
@@ -136,75 +158,91 @@ void search_path(graph * g) {
  *
  * Returns: 0 on successful execution, non-zero on failure.
  */
-int main(int argc, char * argv[]) {
-        FILE * file;
-        char buff[255];
-        int edges;
+int main(int argc, char *argv[])
+{
+	FILE *file;
+	char buff[255];
+	int edges;
 
-        const char * filename = argv[1];
-        file = fopen(filename, "r");
+	const char *filename = argv[1];
+	file = fopen(filename, "r");
 
-        if (file == NULL) {
-                fprintf(stderr, "Failed to open %s\n", filename);
-                exit(EXIT_FAILURE);
-        }
+	if (file == NULL)
+	{
+		fprintf(stderr, "Failed to open %s\n", filename);
+		exit(EXIT_FAILURE);
+	}
 
-        // Read the number of edges from the file
-        while (fgets(buff, sizeof(buff), file) != NULL) {
-                if (buff[0] == '#' || isspace(buff[0])) {
-                        continue;
-                } else {
-                        sscanf(buff, "%d", & edges);
-                        break;
-                }
-        }
+	// Read the number of edges from the file
+	while (fgets(buff, sizeof(buff), file) != NULL)
+	{
+		if (buff[0] == '#' || isspace(buff[0]))
+		{
+			continue;
+		}
+		else
+		{
+			sscanf(buff, "%d", &edges);
+			break;
+		}
+	}
 
-        if (edges == 0) {
-                fprintf(stderr, "Missing number of edges, map doesn't follow the specification.");
-                exit(EXIT_FAILURE);
-        }
+	if (edges == 0)
+	{
+		fprintf(stderr, "Missing number of edges, map doesn't follow the specification.");
+		exit(EXIT_FAILURE);
+	}
 
-        // Create an empty graph
-        struct graph * g = graph_empty(255);
+	// Create an empty graph
+	struct graph *g = graph_empty(edges * edges);
 
-        char * node_name1 = NULL;
-        char * node_name2 = NULL;
+	char *node_name1 = NULL;
+	char *node_name2 = NULL;
 
-        // Loop to extract node names and build the graph
-        while (fgets(buff, sizeof(buff), file) != NULL) {
-                if (buff[0] == '#' || isdigit(buff[0]) || isspace(buff[0])) {
-                        continue;
-                }
+	// Loop to extract node names and build the graph
+	while (fgets(buff, sizeof(buff), file) != NULL)
+	{
+		if (buff[0] == '#' || isdigit(buff[0]) || isspace(buff[0]))
+		{
+			continue;
+		}
 
-                // Extract node names from the line
-                node_name1 = strtok(buff, " \t\n");
-                node_name2 = strtok(NULL, " \t\n");
+		// Extract node names from the line
+		node_name1 = strtok(buff, " \t\n");
+		node_name2 = strtok(NULL, " \t\n");
 
-                // Insert nodes into the graph if not already present
-                graph_insert_node(g, node_name1);
-                graph_insert_node(g, node_name2);
+		if (node_name2 == NULL || node_name2[0] == '#')
+		{
+			fprintf(stderr, "Mmmmm");
+			exit(EXIT_FAILURE);
+		}
 
-                // Retrieve nodes
-                node * node1 = graph_find_node(g, node_name1);
-                node * node2 = graph_find_node(g, node_name2);
+		// Insert nodes into the graph if not already present
+		graph_insert_node(g, node_name1);
+		graph_insert_node(g, node_name2);
 
-                // Insert an edge between the nodes
-                graph_insert_edge(g, node1, node2);
-        }
+		// Retrieve nodes
+		node *node1 = graph_find_node(g, node_name1);
+		node *node2 = graph_find_node(g, node_name2);
 
-        // Close the file
-        if (fclose(file)) {
-                fprintf(stderr, "Failed to close %s: %s\n", filename, strerror(errno));
-                return -1;
-        }
+		// Insert an edge between the nodes
+		graph_insert_edge(g, node1, node2);
+	}
 
-        // Perform interactive search for paths between nodes
-        search_path(g);
+	// Close the file
+	if (fclose(file))
+	{
+		fprintf(stderr, "Failed to close %s: %s\n", filename, strerror(errno));
+		return -1;
+	}
 
-        // Clean up and free memory
-        graph_kill(g);
-        free(node_name1);
-        free(node_name2);
+	// Perform interactive search for paths between nodes
+	search_path(g);
 
-        return 0;
+	// Clean up and free memory
+	graph_kill(g);
+	// free(node_name1);
+	// free(node_name2);
+
+	return 0;
 }
