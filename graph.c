@@ -5,7 +5,6 @@
  * CS Username: id23lnm, id23aon, ens21dfa
  * Description: Implementation of a graph as an adjancency matrix.
  * Date:        2023-03-14.
- * gcc -g -Wall is_connected.c -o is_connected -I ~/edu/doa/code_base/datastructures-v1.0.13.0/include/ ~/edu/doa/code_base/datastructures-v1.0.13.0/src/dlist/dlist.c ~/edu/doa/code_base/datastructures-v1.0.13.0/src/queue/queue.c ~/edu/doa/code_base/datastructures-v1.0.13.0/src/list/list.c ~/edu/doa/code_base/datastructures-v1.0.13.0/src/array_1d/array_1d.c  graph.c
  */
 
 #include <stdio.h>
