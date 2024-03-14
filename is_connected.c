@@ -191,7 +191,7 @@ int main(int argc, char *argv[])
 
 	if (edges == 0)
 	{
-		fprintf(stderr, "Missing number of edges, map doesn't follow the specification.");
+		fprintf(stderr, "Missing number of edges, map doesn't follow the specification.\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -215,7 +215,7 @@ int main(int argc, char *argv[])
 
 		if (node_name2 == NULL || node_name2[0] == '#')
 		{
-			fprintf(stderr, "Missing a second node, map doesn't follow the specification.");
+			fprintf(stderr, "Missing a second node, map doesn't follow the specification.\n");
 			exit(EXIT_FAILURE);
 		}
 
