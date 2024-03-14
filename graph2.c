@@ -1,9 +1,10 @@
 /**
  * Datastructure and Algorithms.
- * Program:    graph.c
- * Authors:    Waseem Jalbout, Dino Felarca.
- * CS Username: id21wjt, ens21dfa
- * Date:       2023-08-23.
+ * Program:     graph2.c
+ * Authors:    	Lovisa Nordström, Anna Olsson, Dino Felarca
+ * CS Username: id23lnm, id23aon, ens21dfa
+ * Description: Implementation of a graph as a array of directed lists.
+ * Date:        2023-03-14.
  * gcc -g -Wall is_connected.c -o is_connected -I ~/edu/doa/code_base/datastructures-v1.0.13.0/include/ ~/edu/doa/code_base/datastructures-v1.0.13.0/src/dlist/dlist.c ~/edu/doa/code_base/datastructures-v1.0.13.0/src/queue/queue.c ~/edu/doa/code_base/datastructures-v1.0.13.0/src/list/list.c ~/edu/doa/code_base/datastructures-v1.0.13.0/src/array_1d/array_1d.c  graph.c
  */
 
@@ -20,16 +21,16 @@
 // Structure representing a node in the graph
 struct node
 {
-	dlist *neighbours; // List of neighboring nodes
-	bool seen;		   // Flag to track whether the node has been seen
-	char *name;		   // Name of the node
+	dlist *neighbours;	// List of neighboring nodes
+	bool seen;			// Flag to track whether the node has been seen
+	char *name;			// Name of the node
 };
 
 // Structure representing a graph
 struct graph
 {
-	struct array_1d *nodes; // Array of nodes
-	int max_nodes;			// Maximum number of nodes allowed in the graph
+	struct array_1d *nodes; 	// Array of nodes
+	int max_nodes;				// Maximum number of nodes allowed in the graph
 };
 
 /**
@@ -39,8 +40,7 @@ struct graph
  *
  * Returns: true if the nodes are equal, false otherwise.
  */
-bool nodes_are_equal(const node *n1,
-					 const node *n2)
+bool nodes_are_equal(const node *n1, const node *n2)
 {
 	return n1 == n2;
 }
@@ -78,8 +78,7 @@ bool graph_is_empty(const graph *g)
  *
  * Returns: A pointer to the modified graph.
  */
-graph *graph_insert_node(graph *g,
-						 const char *s)
+graph *graph_insert_node(graph *g, const char *s)
 {
 	node *n = malloc(sizeof(*n));
 	n->name = malloc(sizeof(n->name));
@@ -90,11 +89,9 @@ graph *graph_insert_node(graph *g,
 	// Find an empty slot in the nodes array and insert the node
 	for (int i = 0; i < (g->max_nodes); i++)
 	{
-
 		// Check if the node already exist in the array to avoid duplicates
 		if (array_1d_has_value(g->nodes, i))
 		{
-
 			struct node *current_node = array_1d_inspect_value(g->nodes, i);
 
 			if (strncmp(s, current_node->name, 40) == 0)
@@ -123,15 +120,14 @@ graph *graph_insert_node(graph *g,
  *
  * Returns: A pointer to the found node, or NULL if not found.
  */
-node *graph_find_node(const graph *g,
-					  const char *s)
+node *graph_find_node(const graph *g, const char *s)
 {
 	for (int i = 0; array_1d_has_value(g->nodes, i); i++)
 	{
-		struct node *node1 = array_1d_inspect_value(g->nodes, i);
-		if (strncmp(s, node1->name, 40) == 0)
+		struct node *current_node = array_1d_inspect_value(g->nodes, i);
+		if (strncmp(s, current_node->name, 40) == 0)
 		{
-			return node1;
+			return current_node;
 		}
 	}
 	return NULL;
@@ -144,8 +140,7 @@ node *graph_find_node(const graph *g,
  *
  * Returns: true if the node has been seen, false otherwise.
  */
-bool graph_node_is_seen(const graph *g,
-						const node *n)
+bool graph_node_is_seen(const graph *g, const node *n)
 {
 	return n->seen;
 }
@@ -174,8 +169,8 @@ graph *graph_reset_seen(graph *g)
 {
 	for (int i = 0; array_1d_has_value(g->nodes, i); i++)
 	{
-		struct node *node1 = array_1d_inspect_value(g->nodes, i);
-		node1->seen = false;
+		struct node *current_node = array_1d_inspect_value(g->nodes, i);
+		current_node->seen = false;
 	}
 	return g;
 }
@@ -201,18 +196,17 @@ graph *graph_insert_edge(graph *g, node *n1, node *n2)
  *
  * Returns: A list of neighboring nodes.
  */
-dlist *graph_neighbours(const graph *g,
-						const node *n)
+dlist *graph_neighbours(const graph *g, const node *n)
 {
 	dlist_pos pos = dlist_first(n->neighbours);
-	dlist *neighbours_neighbour = dlist_empty(NULL);
+	dlist *current_neighbours = dlist_empty(NULL);
 
 	while (!dlist_is_end(n->neighbours, pos))
 	{
-		dlist_insert(neighbours_neighbour, dlist_inspect(n->neighbours, pos), dlist_first(neighbours_neighbour));
+		dlist_insert(current_neighbours, dlist_inspect(n->neighbours, pos), dlist_first(current_neighbours));
 		pos = dlist_next(n->neighbours, pos);
 	}
-	return neighbours_neighbour;
+	return current_neighbours;
 }
 
 /**

@@ -1,9 +1,18 @@
+/**
+ * Datastructure and Algorithms.
+ * Program:     graph.c
+ * Authors:    	Lovisa Nordström, Anna Olsson, Dino Felarca
+ * CS Username: id23lnm, id23aon, ens21dfa
+ * Description: Implementation of a graph as an adjancency matrix.
+ * Date:        2023-03-14.
+ * gcc -g -Wall is_connected.c -o is_connected -I ~/edu/doa/code_base/datastructures-v1.0.13.0/include/ ~/edu/doa/code_base/datastructures-v1.0.13.0/src/dlist/dlist.c ~/edu/doa/code_base/datastructures-v1.0.13.0/src/queue/queue.c ~/edu/doa/code_base/datastructures-v1.0.13.0/src/list/list.c ~/edu/doa/code_base/datastructures-v1.0.13.0/src/array_1d/array_1d.c  graph.c
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
 #include <stdbool.h>
-
 #include <graph.h>
 #include <array_2d.h>
 #include <array_1d.h>
@@ -12,16 +21,16 @@
 // Structure representing a graph
 struct graph
 {
-	struct array_2d *matrix; // Adjacency matrix of nodes
-	int max_nodes;			 // Maximum number of nodes allowed in the graph
-	struct array_1d *nodes;	 // Matrix of nodes
+	struct array_2d *matrix; 	// Adjacency matrix
+	int max_nodes;				// Maximum number of nodes allowed in the graph
+	struct array_1d *nodes;	 	// Matrix of nodes
 };
 
 // Structure representing a node in the graph
 struct node
 {
-	bool seen;	// Flag to track whether the node has been seen
-	char *name; // Name of the node
+	bool seen;		// Flag to track whether the node has been seen
+	char *name; 	// Name of the node
 };
 
 /**
@@ -83,7 +92,6 @@ graph *graph_empty(int max_nodes)
  */
 bool graph_is_empty(const graph *g)
 {
-
 	return !array_1d_has_value(g->nodes, array_1d_low(g->nodes));
 }
 
@@ -96,7 +104,6 @@ bool graph_is_empty(const graph *g)
  */
 graph *graph_insert_node(graph *g, const char *s)
 {
-
 	node *n = malloc(sizeof(*n));
 	n->name = malloc(sizeof(n->name));
 	n->seen = false;
@@ -105,11 +112,9 @@ graph *graph_insert_node(graph *g, const char *s)
 	// Find an empty slot in the nodes array and insert the node
 	for (int i = 0; i < (g->max_nodes); i++)
 	{
-
 		// Check if the node already exist in the array to avoid duplicates
 		if (array_1d_has_value(g->nodes, i))
 		{
-
 			struct node *current_node = array_1d_inspect_value(g->nodes, i);
 
 			if (strncmp(s, current_node->name, 40) == 0)
@@ -124,7 +129,6 @@ graph *graph_insert_node(graph *g, const char *s)
 		// If there is an empty slot, insert the node
 		if (!array_1d_has_value(g->nodes, i))
 		{
-
 			array_1d_set_value(g->nodes, n, i);
 			break;
 		}
@@ -142,16 +146,13 @@ graph *graph_insert_node(graph *g, const char *s)
  */
 node *graph_find_node(const graph *g, const char *s)
 {
-
 	// Iterate over the nodes in the array, return if the node is found
 	for (int i = 0; array_1d_has_value(g->nodes, i); i++)
 	{
-
 		struct node *current_node = array_1d_inspect_value(g->nodes, i);
 
 		if (strncmp(s, current_node->name, 40) == 0)
 		{
-
 			return current_node;
 		}
 	}
@@ -168,7 +169,6 @@ node *graph_find_node(const graph *g, const char *s)
  */
 bool graph_node_is_seen(const graph *g, const node *n)
 {
-
 	return n->seen;
 }
 
@@ -182,7 +182,6 @@ bool graph_node_is_seen(const graph *g, const node *n)
  */
 graph *graph_node_set_seen(graph *g, node *n, bool seen)
 {
-
 	n->seen = seen;
 	return g;
 }
@@ -195,10 +194,8 @@ graph *graph_node_set_seen(graph *g, node *n, bool seen)
  */
 graph *graph_reset_seen(graph *g)
 {
-
 	for (int i = 0; array_1d_has_value(g->nodes, i); i++)
 	{
-
 		struct node *current_node = array_1d_inspect_value(g->nodes, i);
 
 		current_node->seen = false;
@@ -217,18 +214,15 @@ graph *graph_reset_seen(graph *g)
  */
 graph *graph_insert_edge(graph *g, node *n1, node *n2)
 {
-
 	int index_i = 0;
 	int index_j = 0;
 
 	for (int i = 0; array_1d_has_value(g->nodes, i); i++)
 	{
-
 		struct node *current_node = array_1d_inspect_value(g->nodes, i);
 
 		if (strncmp(n1->name, current_node->name, 40) == 0)
 		{
-
 			index_i = i;
 		}
 
@@ -263,13 +257,11 @@ dlist *graph_neighbours(const graph *g, const node *n)
 	// Iterate over the array with the nodes
 	for (int i = 0; array_1d_has_value(g->nodes, i); i++)
 	{
-
 		struct node *current_node = array_1d_inspect_value(g->nodes, i);
 
 		// If the node is found, save the index
 		if (strncmp(n->name, current_node->name, 40) == 0)
 		{
-
 			index_i = i;
 			break;
 		}
@@ -278,11 +270,9 @@ dlist *graph_neighbours(const graph *g, const node *n)
 	// Iterate over the columns in the matrx
 	for (int j = 0; j < (g->max_nodes); j++)
 	{
-
 		// Check if the column has a value and it is not the same index as the row
 		if (array_2d_has_value(g->matrix, index_i, j) && index_i != j)
 		{
-
 			// Inspect the node from the array and insert the node first in the list
 			dlist_insert(l, array_1d_inspect_value(g->nodes, j), dlist_first(l));
 		}
@@ -299,7 +289,6 @@ dlist *graph_neighbours(const graph *g, const node *n)
  */
 void graph_kill(graph *g)
 {
-
 	// Deallocate memory for the adjacency matrix
 	array_2d_kill(g->matrix);
 
@@ -308,7 +297,6 @@ void graph_kill(graph *g)
 	{
 		if (array_1d_has_value(g->nodes, i))
 		{
-
 			node *n = array_1d_inspect_value(g->nodes, i);
 			free(n->name);
 			free(n);

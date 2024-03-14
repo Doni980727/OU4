@@ -1,10 +1,10 @@
 # Some airline network
 8
-UME BMA # Umea-Bromma
-BMA UME # Bromma-Umea
-BMA MMX # Bromma-Malmo
-MMX BMA # Malmo-Bromma
-BMA GOT # Bromma-Goteborg
-GOT BMA # Goteborg-Bromma
+UME ARN # Umea-Arlanda
+ARN UME # Arlanda-Umea
+ARN OSL # Arlanda-Oslo
+OSL ARN # Oslo-Arlanda
+ARN GOT # Arlanda-Goteborg
+GOT ARN # Goteborg-Arlanda
 LLA PJA # Lulea-Pajala
 PJA LLA # Pajala-Lulea

@@ -1,9 +1,11 @@
 /**
  * Datastructure and Algorithms.
- * Program:    is_connected.c
- * Authors:    Waseem Jalbout, Dino Felarca.
- * CS Username: id21wjt, ens21dfa
- * Date:       2023-08-23.
+ * Program:     is_connected.c
+ * Authors:     Lovisa Nordström, Anna Olsson, Dino Felarca
+ * CS Username: id23lnm, id23aon, ens21dfa
+ * Description: The program reads the graph from a map file,
+ * 				interacts with the user and does a breadth-first search in the graph.
+ * Date:        2023-03-14.
  */
 
 #include <stdio.h>
@@ -213,7 +215,7 @@ int main(int argc, char *argv[])
 
 		if (node_name2 == NULL || node_name2[0] == '#')
 		{
-			fprintf(stderr, "Mmmmm");
+			fprintf(stderr, "Missing a second node, map doesn't follow the specification.");
 			exit(EXIT_FAILURE);
 		}
 
