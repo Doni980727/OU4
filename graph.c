@@ -4,7 +4,7 @@
  * Authors:    	Lovisa Nordström, Anna Olsson, Dino Felarca
  * CS Username: id23lnm, id23aon, ens21dfa
  * Description: Implementation of a graph as an adjancency matrix.
- * Date:        2023-03-14.
+ * Date:        2023-03-15.
  */
 
 #include <stdio.h>
@@ -20,16 +20,16 @@
 // Structure representing a graph
 struct graph
 {
-	struct array_2d *matrix; 	// Adjacency matrix
-	int max_nodes;				// Maximum number of nodes allowed in the graph
-	struct array_1d *nodes;	 	// Matrix of nodes
+	struct array_2d *matrix; // Adjacency matrix
+	int max_nodes;			 // Maximum number of nodes allowed in the graph
+	struct array_1d *nodes;	 // Matrix of nodes
 };
 
 // Structure representing a node in the graph
 struct node
 {
-	bool seen;		// Flag to track whether the node has been seen
-	char *name; 	// Name of the node
+	bool seen;	// Flag to track whether the node has been seen
+	char *name; // Name of the node
 };
 
 /**

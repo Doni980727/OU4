@@ -5,7 +5,7 @@
  * CS Username: id23lnm, id23aon, ens21dfa
  * Description: The program reads the graph from a map file,
  * 				interacts with the user and does a breadth-first search in the graph.
- * Date:        2023-03-14.
+ * Date:        2023-03-15.
  */
 
 #include <stdio.h>
@@ -196,7 +196,7 @@ int main(int argc, char *argv[])
 	}
 
 	// Create an empty graph
-	struct graph *g = graph_empty(edges * edges);
+	struct graph *g = graph_empty((edges + 1) * 2);
 
 	char *node_name1 = NULL;
 	char *node_name2 = NULL;
@@ -216,6 +216,8 @@ int main(int argc, char *argv[])
 		if (node_name2 == NULL || node_name2[0] == '#')
 		{
 			fprintf(stderr, "Missing a second node, map doesn't follow the specification.\n");
+			graph_kill(g);
+			fclose(file);
 			exit(EXIT_FAILURE);
 		}
 
@@ -243,8 +245,6 @@ int main(int argc, char *argv[])
 
 	// Clean up and free memory
 	graph_kill(g);
-	free(node_name1);
-	free(node_name2);
 
 	return 0;
 }

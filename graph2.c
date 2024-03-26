@@ -4,7 +4,7 @@
  * Authors:    	Lovisa Nordström, Anna Olsson, Dino Felarca
  * CS Username: id23lnm, id23aon, ens21dfa
  * Description: Implementation of a graph as a array of directed lists.
- * Date:        2023-03-14.
+ * Date:        2023-03-15.
  */
 
 #include <stdio.h>
@@ -20,16 +20,16 @@
 // Structure representing a node in the graph
 struct node
 {
-	dlist *neighbours;	// List of neighboring nodes
-	bool seen;			// Flag to track whether the node has been seen
-	char *name;			// Name of the node
+	dlist *neighbours; // List of neighboring nodes
+	bool seen;		   // Flag to track whether the node has been seen
+	char *name;		   // Name of the node
 };
 
 // Structure representing a graph
 struct graph
 {
-	struct array_1d *nodes; 	// Array of nodes
-	int max_nodes;				// Maximum number of nodes allowed in the graph
+	struct array_1d *nodes; // Array of nodes
+	int max_nodes;			// Maximum number of nodes allowed in the graph
 };
 
 /**
@@ -53,7 +53,7 @@ bool nodes_are_equal(const node *n1, const node *n2)
 graph *graph_empty(int max_nodes)
 {
 	graph *g = calloc(1, sizeof(*g));
-	array_1d *a = array_1d_create(0, (max_nodes - 1), NULL);
+	array_1d *a = array_1d_create(0, (max_nodes)-1, NULL);
 	g->max_nodes = max_nodes;
 	g->nodes = a;
 	return g;
